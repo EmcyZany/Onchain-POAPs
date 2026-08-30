@@ -1,22 +1,17 @@
 import React from 'react';
-import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
-import { BASE_SEPOLIA_CHAIN_ID, BASE_SEPOLIA_EXPLORER, POAP_CONTRACT_ADDRESS } from '../types/contract';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { BASE_SEPOLIA_EXPLORER, POAP_CONTRACT_ADDRESS } from '../types/contract';
 import { shortenAddress } from '../lib/utils';
 import { FarcasterUserContext } from '../lib/farcaster';
 import {
   Sparkles,
-  Wallet,
   PlusCircle,
   Award,
   BookOpen,
   KeyRound,
   Users,
   Compass,
-  ExternalLink,
   ChevronDown,
-  LogOut,
-  ShieldCheck,
-  Zap,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -32,15 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   farcasterUser,
   isMiniApp,
 }) => {
-  const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending } = useConnect();
-  const { disconnect } = useDisconnect();
-  const chainId = useChainId();
-  const { switchChain } = useSwitchChain();
-  const [isWalletMenuOpen, setIsWalletMenuOpen] = React.useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = React.useState(false);
-
-  const isCorrectNetwork = chainId === BASE_SEPOLIA_CHAIN_ID;
 
   const navLinks = [
     { id: 'explore', label: 'Explore', icon: Compass },
@@ -99,7 +86,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Right Section: Network & Wallet & Farcaster */}
+        {/* Right Section: RainbowKit ConnectButton & Farcaster */}
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Farcaster Mini App Badge */}
           {isMiniApp && (
@@ -109,92 +96,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           )}
 
-          {/* Network Switcher Alert if not Base Sepolia */}
-          {isConnected && !isCorrectNetwork && (
-            <button
-              id="switch-network-btn"
-              onClick={() => switchChain({ chainId: BASE_SEPOLIA_CHAIN_ID })}
-              className="px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-semibold hover:bg-amber-500/30 transition-colors animate-bounce"
-            >
-              Switch to Base Sepolia
-            </button>
-          )}
-
-          {/* Base Sepolia Pill (when connected and correct) */}
-          {isConnected && isCorrectNetwork && (
-            <div className="hidden md:flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Connected</span>
-            </div>
-          )}
-
-          {/* Wallet Connect/Disconnect */}
-          {!isConnected ? (
-            <button
-              id="connect-wallet-btn"
-              onClick={() => connect({ connector: connectors[0] })}
-              disabled={isPending}
-              className="flex items-center gap-2 bg-[#0052FF] hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg shadow-[#0052FF]/20 transition-all active:scale-95 disabled:opacity-50"
-            >
-              <Wallet className="w-4 h-4" />
-              <span>{isPending ? 'Connecting...' : 'Connect Wallet'}</span>
-            </button>
-          ) : (
-            <div className="relative">
-              <button
-                id="wallet-user-menu-btn"
-                onClick={() => setIsWalletMenuOpen(!isWalletMenuOpen)}
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#1A1A1A] border border-[#262626] hover:border-[#0052FF]/50 text-sm font-mono text-white transition-colors"
-              >
-                <div className="w-2 h-2 rounded-full bg-[#0052FF]" />
-                <span>{shortenAddress(address)}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#888888]" />
-              </button>
-
-              {isWalletMenuOpen && (
-                <div
-                  id="wallet-dropdown-menu"
-                  className="absolute right-0 mt-2 w-64 rounded-xl bg-[#121212] border border-[#262626] shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2"
-                >
-                  <div className="p-2 border-b border-[#262626] mb-1">
-                    <p className="text-xs text-[#888888] font-sans">Connected Address</p>
-                    <p className="text-xs font-mono text-white truncate">{address}</p>
-                  </div>
-
-                  <a
-                    href={`${BASE_SEPOLIA_EXPLORER}/address/${address}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs text-neutral-300 hover:bg-white/[0.04] transition-colors"
-                  >
-                    <span>View on BaseScan</span>
-                    <ExternalLink className="w-3.5 h-3.5 text-[#888888]" />
-                  </a>
-
-                  <a
-                    href={`${BASE_SEPOLIA_EXPLORER}/address/${POAP_CONTRACT_ADDRESS}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs text-neutral-300 hover:bg-white/[0.04] transition-colors"
-                  >
-                    <span>POAP Contract Code</span>
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#888888]" />
-                  </a>
-
-                  <button
-                    onClick={() => {
-                      disconnect();
-                      setIsWalletMenuOpen(false);
-                    }}
-                    className="w-full flex items-center justify-between px-3 py-2 mt-1 rounded-lg text-xs text-red-400 hover:bg-red-500/10 transition-colors"
-                  >
-                    <span>Disconnect</span>
-                    <LogOut className="w-3.5 h-3.5 text-red-400" />
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+          {/* RainbowKit ConnectButton - Modal choice with showBalance=false */}
+          <div id="rainbowkit-connect-wrapper">
+            <ConnectButton showBalance={false} />
+          </div>
 
           {/* Mobile Menu Toggle */}
           <button
@@ -236,3 +141,4 @@ export const Navbar: React.FC<NavbarProps> = ({
     </header>
   );
 };
+

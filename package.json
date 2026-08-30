@@ -13,6 +13,7 @@
   "dependencies": {
     "@farcaster/frame-sdk": "^0.2.0",
     "@google/genai": "^2.4.0",
+    "@rainbow-me/rainbowkit": "^2.2.11",
     "@tailwindcss/vite": "^4.1.14",
     "@tanstack/react-query": "^5.102.8",
     "@types/canvas-confetti": "^1.9.0",
@@ -31,7 +32,7 @@
     "tailwind-merge": "^3.6.0",
     "viem": "^2.56.0",
     "vite": "^6.2.3",
-    "wagmi": "^3.7.7"
+    "wagmi": "^2.14.16"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

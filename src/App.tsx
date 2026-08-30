@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import '@rainbow-me/rainbowkit/styles.css';
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { WagmiProvider, useAccount } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { wagmiConfig } from './lib/wagmi';
 import { useFarcasterFrame } from './hooks/useFarcasterFrame';
+
 import { usePOAPContract } from './hooks/usePOAPContract';
 import { POAPEvent } from './types/contract';
 import { Navbar } from './components/Navbar';
@@ -407,7 +410,19 @@ export default function App() {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <MainAppContent />
+        <RainbowKitProvider
+          modalSize="compact"
+          showRecentTransactions={true}
+          theme={darkTheme({
+            accentColor: '#0052FF',
+            accentColorForeground: 'white',
+            borderRadius: 'medium',
+            fontStack: 'system',
+            overlayBlur: 'small',
+          })}
+        >
+          <MainAppContent />
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
