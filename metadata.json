@@ -1,0 +1,6 @@
+{
+  "name": "Onchain POAPs",
+  "description": "Production-ready decentralized POAP protocol on Base Sepolia. Register events, manage allowlists, generate cryptographic signatures, and collect onchain proof-of-attendance tokens as a standalone app and Farcaster Mini App.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
