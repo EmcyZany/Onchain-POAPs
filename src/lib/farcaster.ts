@@ -22,13 +22,25 @@ export async function initializeFarcaster(): Promise<FarcasterState> {
   }
 
   try {
-    // Notify Farcaster client immediately that the app is ready and hide the splash screen
-    await sdk.actions.ready();
+    // Check if running inside actual Farcaster Mini App with short timeout
+    const isMiniAppCheck = await Promise.race([
+      sdk.isInMiniApp(),
+      new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 600)),
+    ]).catch(() => false);
 
-    const isMiniApp = await sdk.isInMiniApp().catch(() => false);
-    const context = await sdk.context.catch(() => null);
+    if (!isMiniAppCheck) {
+      return { isMiniApp: false, isReady: true };
+    }
 
-    if (context && context.user) {
+    const context = await Promise.race([
+      sdk.context,
+      new Promise<any>((resolve) => setTimeout(() => resolve(null), 600)),
+    ]).catch(() => null);
+
+    // Notify Farcaster client to hide the splash screen
+    await sdk.actions.ready().catch(() => {});
+
+    if (context && context.user && context.user.fid) {
       return {
         isMiniApp: true,
         user: {
@@ -42,16 +54,11 @@ export async function initializeFarcaster(): Promise<FarcasterState> {
     }
 
     return {
-      isMiniApp: isMiniApp || !!context,
+      isMiniApp: !!context,
       isReady: true,
     };
   } catch (err) {
-    console.warn('Farcaster Mini App SDK init notice:', err);
-    try {
-      await sdk.actions.ready();
-    } catch {
-      // Ignore if not running inside Farcaster client
-    }
+    console.debug('Farcaster Mini App SDK init notice:', err);
   }
 
   return { isMiniApp: false, isReady: true };

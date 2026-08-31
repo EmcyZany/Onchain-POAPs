@@ -68,11 +68,17 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import App from './App.tsx';
 import './index.css';
 
-// Call Farcaster Mini App ready() immediately upon load to hide the splash screen
+// Call Farcaster Mini App ready() safely if inside Farcaster environment
 if (typeof window !== 'undefined') {
-  sdk.actions.ready().catch((err) => {
-    console.debug('Farcaster Mini App ready signal sent:', err);
-  });
+  try {
+    sdk.isInMiniApp().then((inMiniApp) => {
+      if (inMiniApp) {
+        sdk.actions.ready().catch(() => {});
+      }
+    }).catch(() => {});
+  } catch {
+    // Ignore outside Farcaster environment
+  }
 }
 
 createRoot(document.getElementById('root')!).render(

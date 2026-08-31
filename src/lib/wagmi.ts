@@ -125,7 +125,7 @@ export const config = getDefaultConfig({
   transports: {
     [baseSepolia.id]: baseSepoliaTransport,
   },
-  ssr: true,
+  ssr: false,
 });
 
 export const wagmiConfig = config;

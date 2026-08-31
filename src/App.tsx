@@ -38,7 +38,24 @@ import {
   BookOpen,
 } from 'lucide-react';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error: any) => {
+        // Do not retry on user rejected or connector reset errors
+        if (error?.message?.includes('User rejected') || error?.message?.includes('reset')) {
+          return false;
+        }
+        return failureCount < 2;
+      },
+      refetchOnWindowFocus: false,
+      staleTime: 30_000,
+    },
+    mutations: {
+      retry: false,
+    },
+  },
+});
 
 export function MainAppContent() {
   const { isMiniApp, user, isReady } = useFarcasterFrame();

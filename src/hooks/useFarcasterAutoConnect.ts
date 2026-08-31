@@ -14,8 +14,8 @@ export function useFarcasterAutoConnect(isMiniApp: boolean) {
   const attemptedRef = useRef(false);
 
   useEffect(() => {
-    // Only proceed if inside Farcaster Mini App and not already connected/connecting
-    if (isConnected || isConnecting || attemptedRef.current) {
+    // Only proceed if strictly confirmed inside Farcaster Mini App and not already connected/connecting
+    if (!isMiniApp || isConnected || isConnecting || attemptedRef.current) {
       return;
     }
 
@@ -23,10 +23,6 @@ export function useFarcasterAutoConnect(isMiniApp: boolean) {
 
     async function attemptAutoConnect() {
       try {
-        // Double check runtime mini-app environment directly from SDK
-        const inMiniApp = isMiniApp || (await sdk.isInMiniApp().catch(() => false));
-        if (!inMiniApp) return;
-
         const farcasterConnector = connectors.find(
           (c) =>
             c.id === 'farcaster' ||
@@ -44,9 +40,8 @@ export function useFarcasterAutoConnect(isMiniApp: boolean) {
           chainId: baseSepolia.id,
         });
       } catch (err: any) {
-        // If connection fails on first tick (e.g. provider loading), allow one retry
-        if (isMounted && err?.message && !err.message.includes('User rejected')) {
-          console.debug('Farcaster wallet auto-connect notice:', err.message);
+        if (isMounted) {
+          console.debug('Farcaster wallet auto-connect skipped:', err?.message);
         }
       }
     }
