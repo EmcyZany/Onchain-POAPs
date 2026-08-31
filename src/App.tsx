@@ -55,7 +55,7 @@ export function MainAppContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | 'public' | 'soulbound' | 'allowlist'>('all');
 
-  // Handle URL params for direct linking (e.g. from QR codes or Warpcast casts)
+  // Handle URL params for direct linking (e.g. from QR codes or Farcaster casts)
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -392,7 +392,7 @@ export function MainAppContent() {
               GitHub Contract
             </a>
             <a
-              href="https://warpcast.com"
+              href="https://farcaster.xyz"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-purple-400 transition-colors"

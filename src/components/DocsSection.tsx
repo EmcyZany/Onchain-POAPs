@@ -46,7 +46,7 @@ export const DocsSection: React.FC = () => {
         </div>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Onchain POAPs Protocol Docs</h2>
         <p className="text-xs sm:text-sm text-[#888888] mt-1">
-          Complete guide for event organizers, smart contract developers, and Warpcast mini-app integrations.
+          Complete guide for event organizers, smart contract developers, and Farcaster mini-app integrations.
         </p>
       </div>
 

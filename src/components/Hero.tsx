@@ -54,7 +54,7 @@ export const Hero: React.FC<HeroProps> = ({
 
             <p className="text-base sm:text-lg text-[#888888] leading-relaxed">
               Mint, create, and distribute cryptographic attendance badges stored directly on Base Sepolia.
-              Works natively inside Warpcast frames and across Web3 browsers.
+              Works natively inside Farcaster mini apps and across Web3 browsers.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -125,7 +125,7 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="p-4 rounded-xl glass hover:border-[#0052FF]/40 transition-colors">
               <p className="text-[11px] text-[#888888] font-semibold uppercase tracking-wider">Mini App</p>
               <p className="text-2xl sm:text-3xl font-extrabold text-white mt-1 font-mono">vNext</p>
-              <p className="text-[11px] text-amber-400 font-medium mt-1">Warpcast Ready</p>
+              <p className="text-[11px] text-purple-400 font-medium mt-1">Farcaster Ready</p>
             </div>
           </div>
         </div>

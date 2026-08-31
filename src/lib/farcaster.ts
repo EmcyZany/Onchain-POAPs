@@ -24,7 +24,7 @@ export async function initializeFarcaster(): Promise<FarcasterState> {
   try {
     const context = await sdk.context;
     if (context && context.user) {
-      // Notify Warpcast the app is ready
+      // Notify Farcaster client the app is ready
       await sdk.actions.ready();
       return {
         isMiniApp: true,
@@ -38,29 +38,29 @@ export async function initializeFarcaster(): Promise<FarcasterState> {
       };
     }
   } catch {
-    // Not running inside a Warpcast frame/miniapp environment
+    // Not running inside a Farcaster frame/miniapp environment
   }
 
   return { isMiniApp: false, isReady: true };
 }
 
 /**
- * Share a POAP to Warpcast with pre-filled cast text & embed
+ * Share a POAP to Farcaster with pre-filled cast text & embed
  */
 export function sharePoapToFarcaster(poapName: string, eventId: bigint | number, url?: string) {
-  const targetUrl = url || (typeof window !== 'undefined' ? `${window.location.origin}/mint/${eventId}` : `https://poaps.base.org/mint/${eventId}`);
+  const targetUrl = url || (typeof window !== 'undefined' ? `${window.location.origin}/mint/${eventId}` : `https://onchain-poaps-nu.vercel.app/mint/${eventId}`);
   const text = `Just collected my onchain POAP for "${poapName}" on Base Sepolia! 🟣⚓️ Mint yours:`;
-  const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(targetUrl)}`;
+  const farcasterShareUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(targetUrl)}`;
   
   if (typeof window !== 'undefined') {
     try {
       if (sdk?.actions?.openUrl) {
-        sdk.actions.openUrl(warpcastUrl);
+        sdk.actions.openUrl(farcasterShareUrl);
         return;
       }
     } catch {
       // Fallback
     }
-    window.open(warpcastUrl, '_blank', 'noopener,noreferrer');
+    window.open(farcasterShareUrl, '_blank', 'noopener,noreferrer');
   }
 }

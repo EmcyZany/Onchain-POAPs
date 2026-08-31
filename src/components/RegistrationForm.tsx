@@ -221,7 +221,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
                 <input
                   id="poap-url-input"
                   type="url"
-                  placeholder="https://warpcast.com/... or https://base.org"
+                  placeholder="https://farcaster.xyz/... or https://base.org"
                   value={externalUrl}
                   onChange={(e) => setExternalUrl(e.target.value)}
                   className="input-field"

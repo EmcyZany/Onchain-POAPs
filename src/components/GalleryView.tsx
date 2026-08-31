@@ -286,7 +286,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
                   <button
                     onClick={() => sharePoapToFarcaster(event.name, event.id)}
                     className="p-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 transition-colors"
-                    title="Share to Warpcast"
+                    title="Share to Farcaster"
                   >
                     <Share2 className="w-3.5 h-3.5" />
                   </button>

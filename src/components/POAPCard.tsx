@@ -171,7 +171,7 @@ export const POAPCard: React.FC<POAPCardProps> = ({
         <button
           onClick={() => sharePoapToFarcaster(event.name, event.id)}
           className="p-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/20 transition-colors"
-          title="Share to Warpcast / Farcaster"
+          title="Share to Farcaster"
         >
           <Share2 className="w-4 h-4" />
         </button>

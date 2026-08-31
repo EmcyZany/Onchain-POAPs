@@ -239,7 +239,7 @@ export const POAPDetailModal: React.FC<POAPDetailModalProps> = ({
               className="flex items-center gap-1 px-3 py-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-semibold transition-colors"
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span>Warpcast</span>
+              <span>Farcaster</span>
             </button>
           </div>
 
