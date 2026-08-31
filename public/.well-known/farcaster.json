@@ -21,7 +21,7 @@
       "https://onchain-poaps-nu.vercel.app/screenshot-mint.png",
       "https://onchain-poaps-nu.vercel.app/screenshot-create.png"
     ],
-    "buttonTitle": "Open POAP Studio",
+    "buttonTitle": "Launch app",
     "splashImageUrl": "https://onchain-poaps-nu.vercel.app/icon.png",
     "splashBackgroundColor": "#050505",
     "ogTitle": "Onchain POAPs Protocol",
