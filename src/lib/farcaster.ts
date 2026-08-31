@@ -1,4 +1,4 @@
-import sdk from '@farcaster/frame-sdk';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 export interface FarcasterUserContext {
   fid?: number;
@@ -22,10 +22,13 @@ export async function initializeFarcaster(): Promise<FarcasterState> {
   }
 
   try {
-    const context = await sdk.context;
+    // Notify Farcaster client immediately that the app is ready and hide the splash screen
+    await sdk.actions.ready();
+
+    const isMiniApp = await sdk.isInMiniApp().catch(() => false);
+    const context = await sdk.context.catch(() => null);
+
     if (context && context.user) {
-      // Notify Farcaster client the app is ready
-      await sdk.actions.ready();
       return {
         isMiniApp: true,
         user: {
@@ -37,8 +40,18 @@ export async function initializeFarcaster(): Promise<FarcasterState> {
         isReady: true,
       };
     }
-  } catch {
-    // Not running inside a Farcaster frame/miniapp environment
+
+    return {
+      isMiniApp: isMiniApp || !!context,
+      isReady: true,
+    };
+  } catch (err) {
+    console.warn('Farcaster Mini App SDK init notice:', err);
+    try {
+      await sdk.actions.ready();
+    } catch {
+      // Ignore if not running inside Farcaster client
+    }
   }
 
   return { isMiniApp: false, isReady: true };
@@ -66,3 +79,4 @@ export function sharePoapToFarcaster(poapName: string, _eventId?: bigint | numbe
     window.open(farcasterShareUrl, '_blank', 'noopener,noreferrer');
   }
 }
+
