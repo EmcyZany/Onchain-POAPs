@@ -46,117 +46,119 @@ export function usePOAPContract() {
     if (!publicClient) return;
     setIsLoadingEvents(true);
     try {
-      const total = await (publicClient.readContract as any)({
-        address: POAP_CONTRACT_ADDRESS,
-        abi: ONCHAIN_POAPS_ABI,
-        functionName: 'totalEvents',
-      });
+      let count = 0;
+      try {
+        const total = await (publicClient.readContract as any)({
+          address: POAP_CONTRACT_ADDRESS,
+          abi: ONCHAIN_POAPS_ABI,
+          functionName: 'totalEvents',
+        });
+        count = Number(total);
+      } catch (err) {
+        console.warn('Could not read totalEvents directly, fallback to totalEventsBigInt:', err);
+        count = totalEventsBigInt ? Number(totalEventsBigInt) : 0;
+      }
 
-      const count = Number(total);
       if (count === 0) {
         setAllEvents([]);
         setIsLoadingEvents(false);
         return;
       }
 
-      // Fetch all event structs (contract IDs usually 1..total or 0..total-1)
-      const promises = [];
+      // Build batched multicall contracts list: events, totalSupply, uri, hasClaimed
+      const contracts: any[] = [];
       for (let i = 1; i <= count; i++) {
-        promises.push(
-          (async () => {
-            try {
-              const evData = (await (publicClient.readContract as any)({
-                address: POAP_CONTRACT_ADDRESS,
-                abi: ONCHAIN_POAPS_ABI,
-                functionName: 'events',
-                args: [BigInt(i)],
-              })) as [
-                string,
-                string,
-                bigint,
-                string,
-                `0x${string}`,
-                `0x${string}`,
-                `0x${string}`,
-                bigint,
-                string,
-                boolean,
-                boolean
-              ];
-
-              let claimed = false;
-              if (address) {
-                try {
-                  claimed = (await (publicClient.readContract as any)({
-                    address: POAP_CONTRACT_ADDRESS,
-                    abi: ONCHAIN_POAPS_ABI,
-                    functionName: 'hasClaimed',
-                    args: [BigInt(i), address],
-                  })) as boolean;
-                } catch {
-                  claimed = false;
-                }
-              }
-
-              let supply = 0n;
-              try {
-                supply = (await (publicClient.readContract as any)({
-                  address: POAP_CONTRACT_ADDRESS,
-                  abi: ONCHAIN_POAPS_ABI,
-                  functionName: 'totalSupply',
-                  args: [BigInt(i)],
-                })) as bigint;
-              } catch {
-                supply = 0n;
-              }
-
-              let uriStr = '';
-              try {
-                uriStr = (await (publicClient.readContract as any)({
-                  address: POAP_CONTRACT_ADDRESS,
-                  abi: ONCHAIN_POAPS_ABI,
-                  functionName: 'uri',
-                  args: [BigInt(i)],
-                })) as string;
-              } catch {
-                uriStr = '';
-              }
-
-              const poap: POAPEvent = {
-                id: BigInt(i),
-                name: evData[0],
-                description: evData[1],
-                eventDate: evData[2],
-                location: evData[3],
-                allowlistRoot: evData[4],
-                svgImage: evData[5],
-                creator: evData[6],
-                createdAt: evData[7],
-                externalUrl: evData[8],
-                isSoulbound: evData[9],
-                isPublic: evData[10],
-                totalSupply: supply,
-                hasClaimed: claimed,
-                rawSvg: uriStr.startsWith('data:') ? uriStr : undefined,
-              };
-              return poap;
-            } catch (err) {
-              console.warn(`Error reading event ${i}:`, err);
-              return null;
-            }
-          })()
-        );
+        contracts.push({
+          address: POAP_CONTRACT_ADDRESS,
+          abi: ONCHAIN_POAPS_ABI,
+          functionName: 'events',
+          args: [BigInt(i)],
+        });
+        contracts.push({
+          address: POAP_CONTRACT_ADDRESS,
+          abi: ONCHAIN_POAPS_ABI,
+          functionName: 'totalSupply',
+          args: [BigInt(i)],
+        });
+        contracts.push({
+          address: POAP_CONTRACT_ADDRESS,
+          abi: ONCHAIN_POAPS_ABI,
+          functionName: 'uri',
+          args: [BigInt(i)],
+        });
+        if (address) {
+          contracts.push({
+            address: POAP_CONTRACT_ADDRESS,
+            abi: ONCHAIN_POAPS_ABI,
+            functionName: 'hasClaimed',
+            args: [BigInt(i), address],
+          });
+        }
       }
 
-      const results = await Promise.all(promises);
-      const validEvents = results.filter((e): e is POAPEvent => e !== null && e.name.length > 0);
-      setAllEvents(validEvents.reverse()); // latest first
+      const results = await (publicClient.multicall as any)({
+        contracts,
+        allowFailure: true,
+      });
+
+      const stride = address ? 4 : 3;
+      const parsedEvents: POAPEvent[] = [];
+
+      for (let i = 1; i <= count; i++) {
+        const baseIdx = (i - 1) * stride;
+        const evRes = results[baseIdx];
+        const supplyRes = results[baseIdx + 1];
+        const uriRes = results[baseIdx + 2];
+        const claimedRes = address ? results[baseIdx + 3] : undefined;
+
+        if (evRes && evRes.status === 'success' && evRes.result) {
+          const evData = evRes.result as [
+            string,
+            string,
+            bigint,
+            string,
+            `0x${string}`,
+            `0x${string}`,
+            `0x${string}`,
+            bigint,
+            string,
+            boolean,
+            boolean
+          ];
+
+          if (evData[0] && evData[0].trim().length > 0) {
+            const supply = supplyRes && supplyRes.status === 'success' ? (supplyRes.result as bigint) : 0n;
+            const uriStr = uriRes && uriRes.status === 'success' ? (uriRes.result as string) : '';
+            const claimed = claimedRes && claimedRes.status === 'success' ? (claimedRes.result as boolean) : false;
+
+            parsedEvents.push({
+              id: BigInt(i),
+              name: evData[0],
+              description: evData[1],
+              eventDate: evData[2],
+              location: evData[3],
+              allowlistRoot: evData[4],
+              svgImage: evData[5],
+              creator: evData[6],
+              createdAt: evData[7],
+              externalUrl: evData[8],
+              isSoulbound: evData[9],
+              isPublic: evData[10],
+              totalSupply: supply,
+              hasClaimed: claimed,
+              rawSvg: uriStr && uriStr.startsWith('data:') ? uriStr : undefined,
+            });
+          }
+        }
+      }
+
+      setAllEvents(parsedEvents.reverse()); // latest first
     } catch (err) {
-      console.error('Error fetching onchain events:', err);
+      console.warn('Error fetching onchain events batch:', err);
     } finally {
       setIsLoadingEvents(false);
     }
-  }, [publicClient, address]);
+  }, [publicClient, address, totalEventsBigInt]);
 
   useEffect(() => {
     fetchAllEvents();

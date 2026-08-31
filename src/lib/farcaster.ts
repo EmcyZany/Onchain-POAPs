@@ -44,12 +44,14 @@ export async function initializeFarcaster(): Promise<FarcasterState> {
   return { isMiniApp: false, isReady: true };
 }
 
+export const FARCASTER_MINIAPP_URL = 'https://farcaster.xyz/miniapps/2IRa5QcXgO6R/onchain-poaps';
+
 /**
  * Share a POAP to Farcaster with pre-filled cast text & embed
  */
-export function sharePoapToFarcaster(poapName: string, eventId: bigint | number, url?: string) {
-  const targetUrl = url || (typeof window !== 'undefined' ? `${window.location.origin}/mint/${eventId}` : `https://onchain-poaps-nu.vercel.app/mint/${eventId}`);
-  const text = `Just collected my onchain POAP for "${poapName}" on Base Sepolia! 🟣⚓️ Mint yours:`;
+export function sharePoapToFarcaster(poapName: string, _eventId?: bigint | number, url?: string) {
+  const targetUrl = url || FARCASTER_MINIAPP_URL;
+  const text = `Just collected my onchain POAP for "${poapName}" on Base Sepolia! 🟣⚓️ Mint yours: ${FARCASTER_MINIAPP_URL}`;
   const farcasterShareUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(targetUrl)}`;
   
   if (typeof window !== 'undefined') {

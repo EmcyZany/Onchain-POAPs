@@ -1,7 +1,6 @@
 import { http } from 'wagmi';
-import { defineChain } from 'viem';
+import { defineChain, fallback } from 'viem';
 import {
-  connectorsForWallets,
   getDefaultConfig,
   Wallet,
 } from '@rainbow-me/rainbowkit';
@@ -14,9 +13,15 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { farcasterMiniApp } from '@farcaster/miniapp-wagmi-connector';
 
+// Ensure Coinbase wallet doesn't trigger popup COOP cross-origin errors in iframes/mini-apps
+try {
+  coinbaseWallet.preference = 'eoaOnly';
+} catch {
+  // Ignore
+}
+
 /**
- * Exact Base Sepolia Chain Configuration
- * Uses ONLY the official Base Sepolia HTTPS RPC: https://sepolia.base.org
+ * Robust Base Sepolia Chain Configuration with Multicall3
  */
 export const baseSepolia = defineChain({
   id: 84532,
@@ -28,13 +33,23 @@ export const baseSepolia = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ['https://sepolia.base.org'],
+      http: [
+        'https://base-sepolia-rpc.publicnode.com',
+        'https://sepolia.base.org',
+        'https://1rpc.io/base-sepolia',
+        'https://base-sepolia.blockpi.network/v1/rpc/public',
+      ],
     },
   },
   blockExplorers: {
     default: {
       name: 'BaseScan',
       url: 'https://sepolia.basescan.org',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
     },
   },
   testnet: true,
@@ -73,6 +88,16 @@ export const walletGroups = [
 ];
 
 /**
+ * Resilient multi-RPC Transport with batching
+ */
+export const baseSepoliaTransport = fallback([
+  http('https://base-sepolia-rpc.publicnode.com', { batch: { batchSize: 1024, wait: 16 } }),
+  http('https://sepolia.base.org', { batch: { batchSize: 1024, wait: 16 } }),
+  http('https://1rpc.io/base-sepolia', { batch: { batchSize: 1024, wait: 16 } }),
+  http('https://base-sepolia.blockpi.network/v1/rpc/public', { batch: { batchSize: 1024, wait: 16 } }),
+]);
+
+/**
  * RainbowKit & Wagmi Configuration
  */
 export const config = getDefaultConfig({
@@ -84,7 +109,7 @@ export const config = getDefaultConfig({
   chains: [baseSepolia],
   wallets: walletGroups,
   transports: {
-    [baseSepolia.id]: http('https://sepolia.base.org'),
+    [baseSepolia.id]: baseSepoliaTransport,
   },
   ssr: true,
 });
@@ -96,5 +121,6 @@ declare module 'wagmi' {
     config: typeof config;
   }
 }
+
 
 

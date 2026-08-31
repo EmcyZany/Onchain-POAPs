@@ -7,11 +7,11 @@
   "frame": {
     "version": "1",
     "name": "Onchain POAPs",
-    "subtitle": "Decentralized POAP Protocol on Base Sepolia",
+    "subtitle": "Base Sepolia POAP Protocol",
     "description": "Create, claim, and collect cryptographic proof-of-attendance badges on Base Sepolia. Features Merkle allowlists, ECDSA signature mints, and instant Farcaster sharing.",
-    "tagline": "Mint & collect onchain attendance badges",
+    "tagline": "Collect onchain POAP badges",
     "primaryCategory": "social",
-    "tags": ["poap", "base", "badges", "events", "onchain", "farcaster", "nfts", "ethereum"],
+    "tags": ["poap", "base", "badges", "events", "onchain"],
     "iconUrl": "https://onchain-poaps-nu.vercel.app/icon.png",
     "homeUrl": "https://onchain-poaps-nu.vercel.app",
     "imageUrl": "https://onchain-poaps-nu.vercel.app/hero-preview.png",
@@ -24,10 +24,10 @@
     "buttonTitle": "Open POAP Studio",
     "splashImageUrl": "https://onchain-poaps-nu.vercel.app/icon.png",
     "splashBackgroundColor": "#050505",
-    "ogTitle": "Onchain POAPs — Protocol on Base Sepolia",
-    "ogDescription": "Decentralized POAP protocol on Base Sepolia. Register events, manage allowlists, generate signatures, and collect onchain badges.",
+    "ogTitle": "Onchain POAPs Protocol",
+    "ogDescription": "Create, claim, and collect cryptographic POAP badges on Base Sepolia with Merkle allowlists.",
     "ogImageUrl": "https://onchain-poaps-nu.vercel.app/hero-preview.png",
-    "castShareUrl": "https://onchain-poaps-nu.vercel.app",
+    "castShareUrl": "https://farcaster.xyz/miniapps/2IRa5QcXgO6R/onchain-poaps",
     "webhookUrl": "https://onchain-poaps-nu.vercel.app/api/webhook"
   }
 }
