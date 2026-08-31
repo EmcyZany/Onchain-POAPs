@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "",
-    "payload": "",
-    "signature": ""
+    "header": "eyJmaWQiOjI2NDY2OCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDYxOGIzODY2MDFjNWY0NGU3YmE4MGZiYkVENUMxNGM4NzgzNjhFOUYifQ",
+    "payload": "eyJkb21haW4iOiJvbmNoYWluLXBvYXBzLW51LnZlcmNlbC5hcHAifQ",
+    "signature": "S4gWajWTBFyf+bT0aQDo55rq1Jc4+/8am7TTED4zIH4CqmokX40hUWPoL7YEj2RB+lnKglmEyR1lzCSa3Pu+shs="
   },
   "frame": {
     "version": "1",
@@ -28,6 +28,6 @@
     "ogDescription": "Decentralized POAP protocol on Base Sepolia. Register events, manage allowlists, generate signatures, and collect onchain badges.",
     "ogImageUrl": "https://onchain-poaps-nu.vercel.app/hero-preview.png",
     "castShareUrl": "https://onchain-poaps-nu.vercel.app",
-    "webhookUrl": ""
+    "webhookUrl": "https://onchain-poaps-nu.vercel.app/api/webhook"
   }
 }
