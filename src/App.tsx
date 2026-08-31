@@ -48,7 +48,7 @@ export function MainAppContent() {
 
   // Navigation State
   const [activeTab, setActiveTab] = useState<
-    'explore' | 'register' | 'mint' | 'manage' | 'signatures' | 'gallery' | 'docs'
+    'explore' | 'register' | 'mint' | 'manage' | 'allowlist' | 'signatures' | 'gallery' | 'docs'
   >('explore');
 
   // Selected event for Mint / Manage / Detail Modal
@@ -137,7 +137,7 @@ export function MainAppContent() {
       {/* Top Navigation */}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => setActiveTab(tab as any)}
         isMiniApp={isMiniApp}
         farcasterUser={user}
       />
@@ -312,8 +312,8 @@ export function MainAppContent() {
           </div>
         )}
 
-        {/* TAB 4: MANAGE (ALLOWLIST / CREATOR CONTROLS) */}
-        {activeTab === 'manage' && (
+        {/* TAB 4: MANAGE / ALLOWLIST (CREATOR CONTROLS) */}
+        {(activeTab === 'manage' || activeTab === 'allowlist') && (
           <AllowlistManager
             event={selectedEvent}
             events={events}

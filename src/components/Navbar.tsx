@@ -34,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'explore', label: 'Explore', icon: Compass },
     { id: 'register', label: 'Create POAP', icon: PlusCircle },
     { id: 'gallery', label: 'My POAPs', icon: Award },
-    { id: 'allowlist', label: 'Allowlist Studio', icon: Users },
+    { id: 'manage', label: 'Allowlist Studio', icon: Users },
     { id: 'signatures', label: 'Signatures & QR', icon: KeyRound },
     { id: 'docs', label: 'Docs', icon: BookOpen },
   ];
