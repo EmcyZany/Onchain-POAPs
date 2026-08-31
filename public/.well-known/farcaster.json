@@ -27,7 +27,7 @@
     "ogTitle": "Onchain POAPs Protocol",
     "ogDescription": "Create, claim, and collect cryptographic POAP badges on Base Sepolia with Merkle allowlists.",
     "ogImageUrl": "https://onchain-poaps-nu.vercel.app/hero-preview.png",
-    "castShareUrl": "https://farcaster.xyz/miniapps/2IRa5QcXgO6R/onchain-poaps",
+    "castShareUrl": "https://onchain-poaps-nu.vercel.app",
     "webhookUrl": "https://onchain-poaps-nu.vercel.app/api/webhook"
   }
 }
