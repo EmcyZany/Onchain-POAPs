@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@farcaster/frame-sdk": "^0.2.0",
+    "@farcaster/frame-wagmi-connector": "^2.0.0",
+    "@farcaster/miniapp-wagmi-connector": "^2.0.0",
     "@google/genai": "^2.4.0",
     "@rainbow-me/rainbowkit": "^2.2.11",
     "@tailwindcss/vite": "^4.1.14",

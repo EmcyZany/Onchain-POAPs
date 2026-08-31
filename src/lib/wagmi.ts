@@ -1,8 +1,9 @@
-import { http, createConfig } from 'wagmi';
+import { http } from 'wagmi';
 import { defineChain } from 'viem';
 import {
   connectorsForWallets,
   getDefaultConfig,
+  Wallet,
 } from '@rainbow-me/rainbowkit';
 import {
   metaMaskWallet,
@@ -11,6 +12,7 @@ import {
   walletConnectWallet,
   injectedWallet,
 } from '@rainbow-me/rainbowkit/wallets';
+import { farcasterMiniApp } from '@farcaster/miniapp-wagmi-connector';
 
 /**
  * Exact Base Sepolia Chain Configuration
@@ -43,53 +45,44 @@ export const WALLET_CONNECT_PROJECT_ID =
   '043441a0cbd89a4290740967db440476';
 
 /**
- * Clean Choice Wallets list
- * ONLY metaMaskWallet (shimDisconnect: true), coinbaseWallet, rainbowWallet, walletConnectWallet, and injectedWallet (Browser Wallet fallback)
+ * Dedicated Farcaster In-App Mini App Wallet Connector
  */
-export const connectors = connectorsForWallets(
-  [
-    {
-      groupName: 'Recommended',
-      wallets: [
-        metaMaskWallet,
-        coinbaseWallet,
-        rainbowWallet,
-        walletConnectWallet,
-        injectedWallet,
-      ],
-    },
-  ],
-  {
-    appName: 'POAP Studio',
-    appDescription: 'Create and collect onchain POAPs',
-    appUrl: 'https://onchain-poaps-nu.vercel.app',
-    appIcon: 'https://onchain-poaps-nu.vercel.app/icon.png',
-    projectId: WALLET_CONNECT_PROJECT_ID,
-  }
-);
+export const farcasterWallet = (): Wallet => ({
+  id: 'farcaster',
+  name: 'Farcaster Wallet',
+  iconUrl: async () => 'https://onchain-poaps-nu.vercel.app/icon.png',
+  iconBackground: '#855DCD',
+  createConnector: () => farcasterMiniApp(),
+});
 
 /**
- * Wagmi Config using RainbowKit getDefaultConfig
+ * Choice Wallets list: Standard web options + Farcaster in-app wallet
+ */
+export const walletGroups = [
+  {
+    groupName: 'Recommended',
+    wallets: [
+      metaMaskWallet,
+      coinbaseWallet,
+      rainbowWallet,
+      walletConnectWallet,
+      injectedWallet,
+      farcasterWallet,
+    ],
+  },
+];
+
+/**
+ * RainbowKit & Wagmi Configuration
  */
 export const config = getDefaultConfig({
-  appName: 'POAP Studio',
-  appDescription: 'Create and collect onchain POAPs',
+  appName: 'Onchain POAPs',
+  appDescription: 'Create and collect onchain POAPs on Base Sepolia',
   appUrl: 'https://onchain-poaps-nu.vercel.app',
   appIcon: 'https://onchain-poaps-nu.vercel.app/icon.png',
   projectId: WALLET_CONNECT_PROJECT_ID,
   chains: [baseSepolia],
-  wallets: [
-    {
-      groupName: 'Recommended',
-      wallets: [
-        metaMaskWallet,
-        coinbaseWallet,
-        rainbowWallet,
-        walletConnectWallet,
-        injectedWallet,
-      ],
-    },
-  ],
+  wallets: walletGroups,
   transports: {
     [baseSepolia.id]: http('https://sepolia.base.org'),
   },

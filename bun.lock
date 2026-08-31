@@ -6,6 +6,8 @@
       "name": "react-example",
       "dependencies": {
         "@farcaster/frame-sdk": "^0.2.0",
+        "@farcaster/frame-wagmi-connector": "^2.0.0",
+        "@farcaster/miniapp-wagmi-connector": "^2.0.0",
         "@google/genai": "^2.4.0",
         "@rainbow-me/rainbowkit": "^2.2.11",
         "@tailwindcss/vite": "^4.1.14",
@@ -155,9 +157,13 @@
 
     "@farcaster/frame-sdk": ["@farcaster/frame-sdk@0.2.0", "", { "dependencies": { "@farcaster/miniapp-sdk": "0.3.0", "@farcaster/quick-auth": "0.0.8", "comlink": "^4.4.2", "eventemitter3": "^5.0.1", "ox": "^0.14.0" } }, "sha512-BEa8nCtH750cmrTipHC4X4LK/fAPPx+WWxKPiR0DlrAowLRNJV4HRppBA5l6GhCYeBOSEtSxu5mYJbnaqXC1aw=="],
 
+    "@farcaster/frame-wagmi-connector": ["@farcaster/frame-wagmi-connector@2.0.0", "", { "peerDependencies": { "@farcaster/frame-sdk": "^0.2.0", "@wagmi/core": "^2.14.1", "viem": "^2.21.55" } }, "sha512-LYa8g2ywXOFVdzMoDiJ7gWSAd/59n3ew2LD7DmGctlBSs3WatTM2D93sPvVRIoAb44vSDIbWfc4bx3MK0zFzKg=="],
+
     "@farcaster/miniapp-core": ["@farcaster/miniapp-core@0.6.0", "", { "dependencies": { "@solana/web3.js": "^1.98.2", "ox": "^0.14.0", "zod": "^4.0.0" } }, "sha512-sgDQdU6fQDXYbNbjuvvwhww1rwf/S0JCnKsp/o2K+ubtboA3SOiy3Wrc+taBnAh56CCxVbZN9Hck3OpYh9wINw=="],
 
     "@farcaster/miniapp-sdk": ["@farcaster/miniapp-sdk@0.3.0", "", { "dependencies": { "@farcaster/miniapp-core": "0.6.0", "@farcaster/quick-auth": "^0.0.6", "comlink": "^4.4.2", "eventemitter3": "^5.0.1", "ox": "^0.14.0" } }, "sha512-mxze24B5SSLwqpPqUmzthfsGGPeevJvDuOEbLJay1DDgPS/B0LswA0XXfz4d6pViA7Y4TkbeAPMAfuVZ9nIqgQ=="],
+
+    "@farcaster/miniapp-wagmi-connector": ["@farcaster/miniapp-wagmi-connector@2.0.0", "", { "peerDependencies": { "@farcaster/miniapp-sdk": "^0.3.0", "@wagmi/core": "^2.14.1", "viem": "^2.21.55" } }, "sha512-Ek41lXTc79SJSZYL06EXMSpz4q4fnrisMaU8B9IZWH/pt7L4IrblnjjYZGC/a0PITCqWgOPkgLNbP08+4Q3PDg=="],
 
     "@farcaster/quick-auth": ["@farcaster/quick-auth@0.0.8", "", { "dependencies": { "jose": "^5.8.0", "zod": "^3.25.1" }, "peerDependencies": { "typescript": "5.8.3" } }, "sha512-NRIq1BcbcQCC6xBF5owfckkY00xKQVpqhpLNl5rICVpl0xeDsiVbkenIrHaUuyjtCK2W28YVc2ZCFRyz9ERHKg=="],
 

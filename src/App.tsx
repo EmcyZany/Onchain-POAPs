@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
-import { WagmiProvider, useAccount } from 'wagmi';
+import { WagmiProvider, useAccount, useConnect } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { wagmiConfig } from './lib/wagmi';
+import { wagmiConfig, baseSepolia } from './lib/wagmi';
 import { useFarcasterFrame } from './hooks/useFarcasterFrame';
 
 import { usePOAPContract } from './hooks/usePOAPContract';
@@ -18,6 +18,7 @@ import { SignatureStudio } from './components/SignatureStudio';
 import { GalleryView } from './components/GalleryView';
 import { DocsSection } from './components/DocsSection';
 import { POAPDetailModal } from './components/POAPDetailModal';
+import { BrandLogo } from './components/BrandLogo';
 import { parseSignatureQueryParams } from './lib/signatures';
 import {
   Search,
@@ -38,8 +39,9 @@ import {
 const queryClient = new QueryClient();
 
 export function MainAppContent() {
-  const { isFrame, frameContext, openUrl } = useFarcasterFrame();
-  const { address } = useAccount();
+  const { isMiniApp, user, isReady } = useFarcasterFrame();
+  const { isConnected, address } = useAccount();
+  const { connectors, connect } = useConnect();
   const { events, isLoadingEvents, creatorTimelock, refetchEvents } = usePOAPContract();
 
   // Navigation State
@@ -54,6 +56,25 @@ export function MainAppContent() {
   // Filters for Explore
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | 'public' | 'soulbound' | 'allowlist'>('all');
+
+  // Auto-connect ONLY within Farcaster Mini App environment (Web app remains strictly manual)
+  useEffect(() => {
+    if (isMiniApp && !isConnected && connectors && connectors.length > 0) {
+      const farcasterConnector = connectors.find(
+        (c) => c.id === 'farcaster' || c.name.toLowerCase().includes('farcaster')
+      );
+      if (farcasterConnector) {
+        connect(
+          { connector: farcasterConnector, chainId: baseSepolia.id },
+          {
+            onError: (err) => {
+              console.warn('Farcaster wallet auto-connect notice:', err.message);
+            },
+          }
+        );
+      }
+    }
+  }, [isMiniApp, isConnected, connectors, connect]);
 
   // Handle URL params for direct linking (e.g. from QR codes or Farcaster casts)
   useEffect(() => {
@@ -120,7 +141,12 @@ export function MainAppContent() {
   return (
     <div className="min-h-screen bg-[#050505] text-neutral-100 flex flex-col font-sans selection:bg-[#0052FF] selection:text-white">
       {/* Top Navigation */}
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isMiniApp={isMiniApp}
+        farcasterUser={user}
+      />
 
       {/* Main View Body */}
       <main className="flex-1 pb-16">
@@ -371,12 +397,9 @@ export function MainAppContent() {
       {/* Footer */}
       <footer className="border-t border-[#262626] bg-[#050505] py-8 px-4 sm:px-6 lg:px-8 text-xs text-[#888888]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-[#0052FF] flex items-center justify-center text-white font-mono font-bold text-[10px]">
-              B
-            </div>
-            <span className="text-neutral-300 font-semibold">Onchain POAPs Protocol</span>
-            <span className="text-[#888888]">• Base Sepolia</span>
+          <div className="flex items-center gap-3">
+            <BrandLogo size="sm" variant="horizontal" />
+            <span className="text-[#888888] font-mono text-[11px]">• Base Sepolia</span>
           </div>
 
           <div className="flex items-center gap-4 text-[#888888]">

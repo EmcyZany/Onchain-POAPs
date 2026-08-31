@@ -3,6 +3,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { BASE_SEPOLIA_EXPLORER, POAP_CONTRACT_ADDRESS } from '../types/contract';
 import { shortenAddress } from '../lib/utils';
 import { FarcasterUserContext } from '../lib/farcaster';
+import { BrandLogo } from './BrandLogo';
 import {
   Sparkles,
   PlusCircle,
@@ -47,20 +48,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-3 cursor-pointer group"
           id="brand-logo"
         >
-          <div className="w-8 h-8 bg-[#0052FF] rounded-full flex items-center justify-center font-bold text-sm text-white shadow-lg shadow-[#0052FF]/30 group-hover:scale-105 transition-transform">
-            OP
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-lg tracking-tight text-white">Onchain POAPs</span>
-              <span className="text-[#0052FF] text-xs font-mono tracking-wider font-semibold">
-                [BASE SEPOLIA]
-              </span>
-            </div>
-            <p className="text-[11px] text-[#888888] font-mono hidden sm:block">
-              {shortenAddress(POAP_CONTRACT_ADDRESS, 3)}
-            </p>
-          </div>
+          <BrandLogo size="md" variant="horizontal" />
+          <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono tracking-wider font-semibold bg-[#0052FF]/10 text-[#0052FF] border border-[#0052FF]/30">
+            BASE SEPOLIA
+          </span>
         </div>
 
         {/* Desktop Nav */}

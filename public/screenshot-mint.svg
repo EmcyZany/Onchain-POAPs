@@ -1,0 +1,36 @@
+<svg viewBox="0 0 1080 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1920" fill="#050505" />
+  
+  <!-- Header Bar -->
+  <rect width="1080" height="160" fill="#0D0E12" />
+  <circle cx="100" cy="80" r="32" fill="#0052FF" />
+  <text x="160" y="92" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="36" font-weight="800">Mint POAP Badge</text>
+
+  <!-- Mint Card Container -->
+  <rect x="80" y="220" width="920" height="1560" rx="36" fill="#0E1015" stroke="#262A36" stroke-width="2" />
+
+  <!-- Badge Preview Art -->
+  <rect x="240" y="300" width="600" height="600" rx="40" fill="#141824" stroke="#2A334A" stroke-width="3" />
+  <circle cx="540" cy="600" r="180" fill="#0052FF" fill-opacity="0.25" />
+  <circle cx="540" cy="600" r="120" stroke="#0052FF" stroke-width="12" />
+
+  <!-- POAP Metadata -->
+  <text x="540" y="980" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="44" font-weight="900">Base Builder Summit 2026</text>
+  <text x="540" y="1040" text-anchor="middle" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="24">Event ID #1 • Base Sepolia (Chain 84532)</text>
+
+  <!-- Verification Chips -->
+  <rect x="300" y="1090" width="220" height="48" rx="24" fill="#0052FF" fill-opacity="0.15" stroke="#0052FF" stroke-width="1.5" />
+  <text x="410" y="1122" text-anchor="middle" fill="#60A5FA" font-family="system-ui, sans-serif" font-size="20" font-weight="700">Public Mint</text>
+
+  <rect x="560" y="1090" width="220" height="48" rx="24" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="1.5" />
+  <text x="670" y="1122" text-anchor="middle" fill="#34D399" font-family="system-ui, sans-serif" font-size="20" font-weight="700">Gas Optimized</text>
+
+  <!-- Mint Button -->
+  <rect x="180" y="1280" width="720" height="100" rx="24" fill="#0052FF" />
+  <text x="540" y="1342" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="34" font-weight="800">Mint POAP on Base</text>
+
+  <!-- Success Callout -->
+  <rect x="180" y="1420" width="720" height="140" rx="20" fill="#10B981" fill-opacity="0.1" stroke="#10B981" stroke-width="1.5" />
+  <text x="540" y="1480" text-anchor="middle" fill="#34D399" font-family="system-ui, sans-serif" font-size="24" font-weight="700">🎉 Congratulations! Mint Successful</text>
+  <text x="540" y="1520" text-anchor="middle" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="20">Token minted to connected address on Base Sepolia</text>
+</svg>

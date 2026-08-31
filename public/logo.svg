@@ -1,0 +1,58 @@
+<svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#111317" rx="32" />
+  
+  <defs>
+    <linearGradient id="logoChainGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="45%" stop-color="#2563EB" />
+      <stop offset="85%" stop-color="#00D2FF" />
+      <stop offset="100%" stop-color="#2DD4BF" />
+    </linearGradient>
+
+    <linearGradient id="logoRingGrad" x1="10%" y1="90%" x2="90%" y2="10%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="50%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+
+    <linearGradient id="whiteCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A78BFA" />
+      <stop offset="50%" stop-color="#60A5FA" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+
+    <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Centered White Squircle Badge -->
+  <g transform="translate(110, 48)" filter="url(#badgeShadow)">
+    <rect x="0" y="0" width="180" height="180" rx="52" fill="url(#whiteCardGrad)" stroke="#E2E8F0" stroke-width="2" />
+    
+    <!-- Outer Orbit Ring -->
+    <path d="M 90 28 A 62 62 0 1 0 152 90" stroke="url(#logoRingGrad)" stroke-width="10" stroke-linecap="round" />
+    
+    <!-- Accent Dot -->
+    <circle cx="147.5" cy="54.5" r="5.8" fill="#00E5FF" />
+
+    <!-- Chain Group -->
+    <g transform="rotate(45 90 90)">
+      <rect x="74" y="38" width="32" height="58" rx="16" stroke="url(#logoChainGrad)" stroke-width="10" fill="none" stroke-linecap="round" />
+      <rect x="74" y="82" width="32" height="58" rx="16" fill="url(#logoChainGrad)" stroke="none" />
+      <circle cx="90" cy="100" r="7" fill="#FFFFFF" />
+    </g>
+  </g>
+
+  <!-- Typography -->
+  <!-- "Onchain" -->
+  <text x="200" y="300" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="46" font-weight="800" fill="url(#textGrad)" letter-spacing="-0.5">Onchain</text>
+  
+  <!-- "POAPS" -->
+  <text x="200" y="342" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" fill="#94A3B8" letter-spacing="10">POAPS</text>
+</svg>

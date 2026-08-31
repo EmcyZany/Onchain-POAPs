@@ -22,7 +22,7 @@ import {
 export const DocsSection: React.FC = () => {
   const [copiedAbi, setCopiedAbi] = useState(false);
   const [copiedContract, setCopiedContract] = useState(false);
-  const [activeDocTab, setActiveDocTab] = useState<'organizer' | 'developer' | 'errors' | 'abi'>('organizer');
+  const [activeDocTab, setActiveDocTab] = useState<'organizer' | 'developer' | 'farcaster' | 'errors' | 'abi'>('organizer');
 
   const handleCopyAbi = () => {
     navigator.clipboard.writeText(JSON.stringify(ONCHAIN_POAPS_ABI, null, 2));
@@ -51,10 +51,10 @@ export const DocsSection: React.FC = () => {
       </div>
 
       {/* Nav tabs */}
-      <div className="flex items-center gap-1 p-1 rounded-xl glass border-[#262626] text-xs font-semibold">
+      <div className="flex items-center gap-1 p-1 rounded-xl glass border-[#262626] text-xs font-semibold overflow-x-auto">
         <button
           onClick={() => setActiveDocTab('organizer')}
-          className={`flex-1 py-2 rounded-lg transition-colors ${
+          className={`flex-1 min-w-[120px] py-2 rounded-lg transition-colors ${
             activeDocTab === 'organizer' ? 'bg-[#0052FF] text-white shadow-sm' : 'text-[#888888] hover:text-white'
           }`}
         >
@@ -62,15 +62,23 @@ export const DocsSection: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveDocTab('developer')}
-          className={`flex-1 py-2 rounded-lg transition-colors ${
+          className={`flex-1 min-w-[130px] py-2 rounded-lg transition-colors ${
             activeDocTab === 'developer' ? 'bg-[#0052FF] text-white shadow-sm' : 'text-[#888888] hover:text-white'
           }`}
         >
-          Smart Contract Specs
+          Contract Specs
+        </button>
+        <button
+          onClick={() => setActiveDocTab('farcaster')}
+          className={`flex-1 min-w-[140px] py-2 rounded-lg transition-colors ${
+            activeDocTab === 'farcaster' ? 'bg-[#8B5CF6] text-white shadow-sm' : 'text-[#888888] hover:text-white'
+          }`}
+        >
+          🟣 Mini App Setup
         </button>
         <button
           onClick={() => setActiveDocTab('errors')}
-          className={`flex-1 py-2 rounded-lg transition-colors ${
+          className={`flex-1 min-w-[100px] py-2 rounded-lg transition-colors ${
             activeDocTab === 'errors' ? 'bg-[#0052FF] text-white shadow-sm' : 'text-[#888888] hover:text-white'
           }`}
         >
@@ -78,7 +86,7 @@ export const DocsSection: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveDocTab('abi')}
-          className={`flex-1 py-2 rounded-lg transition-colors ${
+          className={`flex-1 min-w-[90px] py-2 rounded-lg transition-colors ${
             activeDocTab === 'abi' ? 'bg-[#0052FF] text-white shadow-sm' : 'text-[#888888] hover:text-white'
           }`}
         >
@@ -214,7 +222,99 @@ export const DocsSection: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 3: Revert Errors Reference */}
+      {/* Tab: Farcaster Mini App Setup Guide */}
+      {activeDocTab === 'farcaster' && (
+        <div className="space-y-6 text-xs sm:text-sm text-neutral-300">
+          <div className="p-6 rounded-2xl glass border-[#262626] space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 font-bold text-base">
+                🟣
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">How to Activate Your Farcaster Mini App</h3>
+                <p className="text-xs text-[#888888]">
+                  Step-by-step instructions to register and launch your Vercel deployment on Farcaster
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-2">
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#262626] space-y-2">
+                <div className="flex items-center gap-2 text-white font-bold">
+                  <span className="w-5 h-5 rounded-full bg-purple-600 text-[11px] flex items-center justify-center text-white">1</span>
+                  <span>Verify Manifest &amp; Metadata</span>
+                </div>
+                <p className="text-xs text-[#888888] pl-7 leading-relaxed">
+                  Your project already includes the complete <code className="text-purple-300 font-mono">/.well-known/farcaster.json</code> with all rich preview properties configured (subtitle, description, tags, screenshots, hero banners, and cast share URLs).
+                </p>
+                <div className="pl-7 pt-1">
+                  <a
+                    href="https://onchain-poaps-nu.vercel.app/.well-known/farcaster.json"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs text-purple-400 hover:text-purple-300 font-mono"
+                  >
+                    <span>View Live farcaster.json</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#262626] space-y-2">
+                <div className="flex items-center gap-2 text-white font-bold">
+                  <span className="w-5 h-5 rounded-full bg-purple-600 text-[11px] flex items-center justify-center text-white">2</span>
+                  <span>Test in Farcaster Frame Validator / Mini App Playground</span>
+                </div>
+                <p className="text-xs text-[#888888] pl-7 leading-relaxed">
+                  Head over to the official developer preview tools to simulate opening the Mini App inside Warpcast / Farcaster clients:
+                </p>
+                <div className="pl-7 flex flex-wrap gap-3 pt-1">
+                  <a
+                    href="https://warpcast.com/~/developers/frames"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold hover:bg-purple-500/20 transition-colors"
+                  >
+                    <span>Farcaster Mini App Playground</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                  <a
+                    href="https://base.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0052FF]/10 border border-[#0052FF]/30 text-[#60A5FA] text-xs font-semibold hover:bg-[#0052FF]/20 transition-colors"
+                  >
+                    <span>Base Ecosystem</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#262626] space-y-2">
+                <div className="flex items-center gap-2 text-white font-bold">
+                  <span className="w-5 h-5 rounded-full bg-purple-600 text-[11px] flex items-center justify-center text-white">3</span>
+                  <span>Auto-Connect In-App Wallet</span>
+                </div>
+                <p className="text-xs text-[#888888] pl-7 leading-relaxed">
+                  When users open the link inside Farcaster, the SDK automatically initializes (<code className="text-neutral-300 font-mono">sdk.actions.ready()</code>) and seamlessly connects the in-app Farcaster wallet without requiring any manual button clicks. Meanwhile, the standalone web app retains standard user-initiated wallet connection.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#121212] border border-[#262626] space-y-2">
+                <div className="flex items-center gap-2 text-white font-bold">
+                  <span className="w-5 h-5 rounded-full bg-purple-600 text-[11px] flex items-center justify-center text-white">4</span>
+                  <span>Cast Your Mini App URL</span>
+                </div>
+                <p className="text-xs text-[#888888] pl-7 leading-relaxed">
+                  Post a new Cast containing your link <code className="text-purple-300 font-mono">https://onchain-poaps-nu.vercel.app</code> or any specific event claim link. Farcaster will immediately render the rich interactive Frame with the "Open POAP Studio" button.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab: Revert Errors Reference */}
       {activeDocTab === 'errors' && (
         <div className="rounded-2xl glass border-[#262626] p-6 space-y-4">
           <h3 className="text-base font-bold text-white">Smart Contract Custom Error Reference</h3>
