@@ -62,20 +62,28 @@ export function MainAppContent() {
   // Auto-connect Farcaster Mini App wallet automatically within Warpcast/Farcaster client
   useFarcasterAutoConnect(isMiniApp);
 
-  // Handle URL params for direct linking (e.g. from QR codes or Farcaster casts)
+  // Handle URL params and path routing (e.g. /manage/:id, /allowlist/:id, ?tab=manage&id=...)
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const urlTab = params.get('tab');
-      const eventIdStr = params.get('id') || params.get('eventId');
+      const urlId = params.get('id') || params.get('eventId');
       const sig = params.get('sig');
 
-      if (urlTab && ['explore', 'register', 'mint', 'manage', 'signatures', 'gallery', 'docs'].includes(urlTab)) {
+      const pathname = window.location.pathname.toLowerCase();
+      const pathMatch = pathname.match(/\/(manage|allowlist)(?:\/(\d+))?/);
+      if (pathMatch) {
+        setActiveTab('manage');
+        if (pathMatch[2] && events.length > 0) {
+          const found = events.find((e) => e.id.toString() === pathMatch[2]);
+          if (found) setSelectedEvent(found);
+        }
+      } else if (urlTab && ['explore', 'register', 'mint', 'manage', 'signatures', 'gallery', 'docs'].includes(urlTab)) {
         setActiveTab(urlTab as any);
       }
 
-      if (eventIdStr && events.length > 0) {
-        const found = events.find((e) => e.id.toString() === eventIdStr);
+      if (urlId && events.length > 0) {
+        const found = events.find((e) => e.id.toString() === urlId);
         if (found) {
           setSelectedEvent(found);
           if (sig) {
@@ -306,35 +314,15 @@ export function MainAppContent() {
 
         {/* TAB 4: MANAGE (ALLOWLIST / CREATOR CONTROLS) */}
         {activeTab === 'manage' && (
-          <div>
-            {selectedEvent ? (
-              <AllowlistManager
-                event={selectedEvent}
-                creatorTimelock={creatorTimelock}
-                onSuccess={() => {
-                  refetchEvents();
-                }}
-              />
-            ) : events.length > 0 ? (
-              <AllowlistManager
-                event={events[0]}
-                creatorTimelock={creatorTimelock}
-                onSuccess={() => {
-                  refetchEvents();
-                }}
-              />
-            ) : (
-              <div className="max-w-md mx-auto py-20 text-center space-y-4">
-                <p className="text-sm text-[#888888]">No event selected for management.</p>
-                <button
-                  onClick={() => setActiveTab('explore')}
-                  className="px-4 py-2 rounded-lg bg-[#0052FF] text-white text-xs font-bold"
-                >
-                  Go to Explore
-                </button>
-              </div>
-            )}
-          </div>
+          <AllowlistManager
+            event={selectedEvent}
+            events={events}
+            creatorTimelock={creatorTimelock}
+            onEventChange={(ev) => setSelectedEvent(ev)}
+            onSuccess={() => {
+              refetchEvents();
+            }}
+          />
         )}
 
         {/* TAB 5: SIGNATURES / QR STUDIO */}
