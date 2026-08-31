@@ -55,9 +55,23 @@ export const baseSepolia = defineChain({
   testnet: true,
 });
 
-export const WALLET_CONNECT_PROJECT_ID =
-  (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID) ||
-  '043441a0cbd89a4290740967db440476';
+// Dynamic WalletConnect Project ID to support both production domain allowlist and development/preview origins
+const getWalletConnectProjectId = () => {
+  if (typeof import.meta !== 'undefined' && (import.meta as any)?.env?.VITE_WALLETCONNECT_PROJECT_ID) {
+    return (import.meta as any).env.VITE_WALLETCONNECT_PROJECT_ID;
+  }
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    // If running on production Vercel deployment, use project's production key
+    if (host.includes('onchain-poaps-nu.vercel.app')) {
+      return '043441a0cbd89a4290740967db440476';
+    }
+  }
+  // For development, preview containers, and localhost: use unrestricted public test Project ID
+  return '3fbb6bba6f1de962d911bb5b5c9dba88';
+};
+
+export const WALLET_CONNECT_PROJECT_ID = getWalletConnectProjectId();
 
 /**
  * Dedicated Farcaster In-App Mini App Wallet Connector
