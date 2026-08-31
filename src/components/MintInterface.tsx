@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import { POAPEvent, BASE_SEPOLIA_CHAIN_ID, BASE_SEPOLIA_EXPLORER, OPENSEA_TESTNET_BASE, POAP_CONTRACT_ADDRESS } from '../types/contract';
-import { formatDate, formatDateTime, shortenAddress } from '../lib/utils';
+import { formatDate, formatDateTime, shortenAddress, parsePOAPImageUri } from '../lib/utils';
 import { sharePoapToFarcaster } from '../lib/farcaster';
 import { parseSignatureQueryParams } from '../lib/signatures';
 import { usePOAPContract } from '../hooks/usePOAPContract';
@@ -111,9 +111,12 @@ export const MintInterface: React.FC<MintInterfaceProps> = ({ event, onSuccess }
   }, [isTxSuccess, txHash, onSuccess]);
 
   const artworkSrc = React.useMemo(() => {
-    if (event.rawSvg && event.rawSvg.startsWith('data:')) {
-      return event.rawSvg;
-    }
+    const parsedRaw = parsePOAPImageUri(event.rawSvg);
+    if (parsedRaw) return parsedRaw;
+
+    const parsedSvgImage = parsePOAPImageUri(event.svgImage);
+    if (parsedSvgImage) return parsedSvgImage;
+
     const templateIndex = Number(event.id || 1n) % POAP_BADGE_TEMPLATES.length;
     const template = POAP_BADGE_TEMPLATES[templateIndex] || POAP_BADGE_TEMPLATES[0];
     const dateStr = formatDate(event.eventDate || event.createdAt);

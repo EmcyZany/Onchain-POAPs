@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { POAPEvent, BASE_SEPOLIA_EXPLORER, OPENSEA_TESTNET_BASE, POAP_CONTRACT_ADDRESS } from '../types/contract';
-import { formatDate, formatDateTime, shortenAddress } from '../lib/utils';
+import { formatDate, formatDateTime, shortenAddress, parsePOAPImageUri } from '../lib/utils';
 import { sharePoapToFarcaster } from '../lib/farcaster';
 import { useCountdown } from '../hooks/useCountdown';
 import { usePOAPContract } from '../hooks/usePOAPContract';
@@ -52,9 +52,12 @@ export const POAPDetailModal: React.FC<POAPDetailModalProps> = ({
   const [togglingPublic, setTogglingPublic] = useState(false);
 
   const artworkSrc = React.useMemo(() => {
-    if (event.rawSvg && event.rawSvg.startsWith('data:')) {
-      return event.rawSvg;
-    }
+    const parsedRaw = parsePOAPImageUri(event.rawSvg);
+    if (parsedRaw) return parsedRaw;
+
+    const parsedSvgImage = parsePOAPImageUri(event.svgImage);
+    if (parsedSvgImage) return parsedSvgImage;
+
     const templateIndex = Number(event.id || 1n) % POAP_BADGE_TEMPLATES.length;
     const template = POAP_BADGE_TEMPLATES[templateIndex] || POAP_BADGE_TEMPLATES[0];
     const dateStr = formatDate(event.eventDate || event.createdAt);

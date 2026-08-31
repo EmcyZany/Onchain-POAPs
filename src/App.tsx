@@ -155,6 +155,8 @@ export function MainAppContent() {
         {activeTab === 'explore' && (
           <div>
             <Hero
+              totalEvents={events.length}
+              isLoading={isLoadingEvents}
               onExploreClick={() => {
                 const el = document.getElementById('explore-catalog');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });

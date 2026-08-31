@@ -1,6 +1,6 @@
 import React from 'react';
 import { POAPEvent } from '../types/contract';
-import { formatDate, shortenAddress } from '../lib/utils';
+import { formatDate, shortenAddress, parsePOAPImageUri } from '../lib/utils';
 import { sharePoapToFarcaster } from '../lib/farcaster';
 import {
   Calendar,
@@ -37,9 +37,12 @@ export const POAPCard: React.FC<POAPCardProps> = ({
 
   // Determine Artwork URL or generated fallback
   const artworkSrc = React.useMemo(() => {
-    if (event.rawSvg && event.rawSvg.startsWith('data:')) {
-      return event.rawSvg;
-    }
+    const parsedRaw = parsePOAPImageUri(event.rawSvg);
+    if (parsedRaw) return parsedRaw;
+
+    const parsedSvgImage = parsePOAPImageUri(event.svgImage);
+    if (parsedSvgImage) return parsedSvgImage;
+
     // Fallback based on event ID or name
     const templateIndex = Number(event.id || 1n) % POAP_BADGE_TEMPLATES.length;
     const template = POAP_BADGE_TEMPLATES[templateIndex] || POAP_BADGE_TEMPLATES[0];

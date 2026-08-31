@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useAccount, usePublicClient } from 'wagmi';
 import { ONCHAIN_POAPS_ABI, POAP_CONTRACT_ADDRESS, POAPEvent } from '../types/contract';
+import { parsePOAPImageUri } from '../lib/utils';
 
 export interface UserPOAPItem {
   event: POAPEvent;
@@ -129,7 +130,7 @@ export function useUserPOAPs() {
               externalUrl: evData[8],
               isSoulbound: evData[9],
               isPublic: evData[10],
-              rawSvg: uriStr && uriStr.startsWith('data:') ? uriStr : undefined,
+              rawSvg: parsePOAPImageUri(uriStr) || (uriStr && uriStr.startsWith('data:') ? uriStr : undefined),
             },
           });
         }

@@ -5,13 +5,15 @@ import { shortenAddress } from '../lib/utils';
 
 interface HeroProps {
   totalEvents?: number;
+  isLoading?: boolean;
   onNavigate?: (tab: string) => void;
   onExploreClick?: () => void;
   onCreateClick?: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
-  totalEvents = 0,
+  totalEvents,
+  isLoading = false,
   onNavigate,
   onExploreClick,
   onCreateClick,
@@ -105,7 +107,11 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="p-4 rounded-xl glass hover:border-[#0052FF]/40 transition-colors">
               <p className="text-[11px] text-[#888888] font-semibold uppercase tracking-wider">Registered POAPs</p>
               <p className="text-2xl sm:text-3xl font-extrabold text-white mt-1 font-mono">
-                {totalEvents > 0 ? totalEvents : '3+'}
+                {isLoading && totalEvents === undefined ? (
+                  <span className="inline-block animate-pulse text-neutral-400">...</span>
+                ) : (
+                  totalEvents ?? 0
+                )}
               </p>
               <p className="text-[11px] text-[#0052FF] font-medium mt-1">Live on Base Sepolia</p>
             </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId, useSwitchChain } from 'wagmi';
 import { useUserPOAPs, UserPOAPItem } from '../hooks/useUserPOAPs';
 import { POAPEvent, BASE_SEPOLIA_CHAIN_ID, BASE_SEPOLIA_EXPLORER, OPENSEA_TESTNET_BASE, POAP_CONTRACT_ADDRESS, ONCHAIN_POAPS_ABI } from '../types/contract';
-import { formatDate, shortenAddress } from '../lib/utils';
+import { formatDate, shortenAddress, parsePOAPImageUri } from '../lib/utils';
 import { POAP_BADGE_TEMPLATES } from '../lib/svgOptimizer';
 import { sharePoapToFarcaster } from '../lib/farcaster';
 import { isAddress, getAddress } from 'viem';
@@ -201,12 +201,12 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
             const templateIndex = Number(event.id || 1n) % POAP_BADGE_TEMPLATES.length;
             const template = POAP_BADGE_TEMPLATES[templateIndex] || POAP_BADGE_TEMPLATES[0];
             const dateStr = formatDate(event.eventDate || event.createdAt);
+            const parsedArtwork = parsePOAPImageUri(event.rawSvg) || parsePOAPImageUri(event.svgImage);
             const artworkSrc =
-              event.rawSvg && event.rawSvg.startsWith('data:')
-                ? event.rawSvg
-                : `data:image/svg+xml;utf8,${encodeURIComponent(
-                    template.generateSvg(event.name, dateStr, '#0052FF')
-                  )}`;
+              parsedArtwork ||
+              `data:image/svg+xml;utf8,${encodeURIComponent(
+                template.generateSvg(event.name, dateStr, '#0052FF')
+              )}`;
 
             return (
               <div

@@ -7,6 +7,7 @@ import {
   usePublicClient,
 } from 'wagmi';
 import { ONCHAIN_POAPS_ABI, POAP_CONTRACT_ADDRESS, POAPEvent } from '../types/contract';
+import { parsePOAPImageUri } from '../lib/utils';
 
 export function usePOAPContract() {
   const { address } = useAccount();
@@ -146,7 +147,7 @@ export function usePOAPContract() {
               isPublic: evData[10],
               totalSupply: supply,
               hasClaimed: claimed,
-              rawSvg: uriStr && uriStr.startsWith('data:') ? uriStr : undefined,
+              rawSvg: parsePOAPImageUri(uriStr) || (uriStr && uriStr.startsWith('data:') ? uriStr : undefined),
             });
           }
         }
