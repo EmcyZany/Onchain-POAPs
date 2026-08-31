@@ -4,7 +4,7 @@
     "payload": "eyJkb21haW4iOiJvbmNoYWluLXBvYXBzLW51LnZlcmNlbC5hcHAifQ",
     "signature": "S4gWajWTBFyf+bT0aQDo55rq1Jc4+/8am7TTED4zIH4CqmokX40hUWPoL7YEj2RB+lnKglmEyR1lzCSa3Pu+shs="
   },
-  "frame": {
+  "miniapp": {
     "version": "1",
     "name": "Onchain POAPs",
     "subtitle": "Base Sepolia POAP Protocol",

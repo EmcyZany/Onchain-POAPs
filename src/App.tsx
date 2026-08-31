@@ -419,7 +419,14 @@ export function MainAppContent() {
 
 export default function App() {
   useEffect(() => {
-    sdk.actions.ready().catch(() => {});
+    async function initMiniApp() {
+      try {
+        await sdk.actions.ready();
+      } catch (err) {
+        console.debug('Farcaster SDK ready error:', err);
+      }
+    }
+    initMiniApp();
   }, []);
 
   return (
