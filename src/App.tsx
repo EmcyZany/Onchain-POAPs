@@ -6,6 +6,7 @@ import { WagmiProvider, useAccount, useConnect } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { wagmiConfig, baseSepolia } from './lib/wagmi';
 import { useFarcasterFrame } from './hooks/useFarcasterFrame';
+import { useFarcasterAutoConnect } from './hooks/useFarcasterAutoConnect';
 
 import { usePOAPContract } from './hooks/usePOAPContract';
 import { POAPEvent } from './types/contract';
@@ -58,24 +59,8 @@ export function MainAppContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | 'public' | 'soulbound' | 'allowlist'>('all');
 
-  // Auto-connect ONLY within Farcaster Mini App environment (Web app remains strictly manual)
-  useEffect(() => {
-    if (isMiniApp && !isConnected && connectors && connectors.length > 0) {
-      const farcasterConnector = connectors.find(
-        (c) => c.id === 'farcaster' || c.name.toLowerCase().includes('farcaster')
-      );
-      if (farcasterConnector) {
-        connect(
-          { connector: farcasterConnector, chainId: baseSepolia.id },
-          {
-            onError: (err) => {
-              console.warn('Farcaster wallet auto-connect notice:', err.message);
-            },
-          }
-        );
-      }
-    }
-  }, [isMiniApp, isConnected, connectors, connect]);
+  // Auto-connect Farcaster Mini App wallet automatically within Warpcast/Farcaster client
+  useFarcasterAutoConnect(isMiniApp);
 
   // Handle URL params for direct linking (e.g. from QR codes or Farcaster casts)
   useEffect(() => {
