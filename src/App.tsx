@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { sdk } from '@farcaster/miniapp-sdk';
 import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { WagmiProvider, useAccount, useConnect } from 'wagmi';
@@ -430,6 +431,10 @@ export function MainAppContent() {
 }
 
 export default function App() {
+  useEffect(() => {
+    sdk.actions.ready().catch(() => {});
+  }, []);
+
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>

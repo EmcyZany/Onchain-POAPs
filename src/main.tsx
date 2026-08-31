@@ -28,8 +28,16 @@ if (typeof window !== 'undefined') {
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { sdk } from '@farcaster/miniapp-sdk';
 import App from './App.tsx';
 import './index.css';
+
+// Call Farcaster Mini App ready() immediately upon load to hide the splash screen
+if (typeof window !== 'undefined') {
+  sdk.actions.ready().catch((err) => {
+    console.debug('Farcaster Mini App ready signal sent:', err);
+  });
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
